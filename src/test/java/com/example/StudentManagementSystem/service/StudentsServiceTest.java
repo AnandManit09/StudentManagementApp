@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -66,6 +67,38 @@ public class StudentsServiceTest {
         Assertions.assertEquals(actual.size(), expectedList.size());
         Assertions.assertEquals(actual.get(0).getName(),expectedList.get(0).getName());
         Assertions.assertEquals(actual.get(0).getAge(),expectedList.get(0).getAge());
+
+    }
+
+    @Test
+    public void shouldTestDeleteById(){
+        int sid=1;
+        Mockito.when(studentsDal.existsById(sid)).thenReturn(true); // We are mocking the behaviour
+        Mockito.doNothing().when(studentsDal).deleteById(sid); // we are mocking the results to not call the actual method to delete real sid
+
+        List<Student> expectedList=new ArrayList<Student>();
+        expectedList.add(
+                new Student(1,"Ramesh Test",
+                        19,
+                        "JUNIT Test",
+                        "Junit Address",
+                        "junit@junit.com",
+                        "29300394949")
+        );
+        expectedList.add(
+                new Student(2,"Rakesh Test",
+                        21,
+                        "Spring Test",
+                        "Junit Address",
+                        "junit@junit.com",
+                        "29300394949")
+        );
+
+        Boolean result=studentsService.deleteStudent(sid);
+
+        Assertions.assertEquals(result,true);
+
+
 
     }
 }
